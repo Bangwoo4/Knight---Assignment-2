@@ -7,7 +7,7 @@ bool isPrime(int n)
     for (int i = 2; i < n; i++)
         if (n % i == 0)
             return false;
- 
+
     return true;
 }
 
@@ -62,12 +62,12 @@ OpponentType HadesOpponent::Type() { return Hades; }
 /* * * END implementation of class BaseOpponent * * */
 
 /* * * BEGIN implementation of class BaseBag * * */
-BaseBag::Node::Node(BaseItem *data, Node*next)
+BaseBag::Node::Node(BaseItem *data, Node *next)
     : data(data), next(next)
 {
 }
 
-BaseBag::Node::~Node() {delete data;}
+BaseBag::Node::~Node() { delete data; }
 
 BaseBag::BaseBag(BaseKnight *knight, int antidote, int phoenixDownI)
     : knight(knight), capacity(0), head(nullptr), size(0)
@@ -83,22 +83,22 @@ bool BaseBag::insertFirst(BaseItem *item)
     else
     {
         size++;
-        Node* new_node = new Node(item, nullptr);
+        Node *new_node = new Node(item, nullptr);
         new_node->next = head;
         head = new_node;
         return true;
     }
 }
 
-BaseItem* BaseBag::get(ItemType itemType)
+BaseItem *BaseBag::get(ItemType itemType)
 {
     if (size == 0)
     {
         return nullptr;
     }
 
-    Node* temp = head;
-    Node* found_node = nullptr;
+    Node *temp = head;
+    Node *found_node = nullptr;
     while (temp && !found_node)
     {
         if (temp->data->Type() == itemType)
@@ -122,7 +122,7 @@ BaseItem *BaseBag::checkHp()
     {
         return nullptr;
     }
-    Node* temp = head;
+    Node *temp = head;
     while (temp && !temp->data->canUse(knight))
     {
         temp = temp->next;
@@ -137,7 +137,7 @@ BaseItem *BaseBag::checkHp()
 
 bool BaseBag::useItem(ItemType itemType)
 {
-    BaseItem* temp = nullptr;
+    BaseItem *temp = nullptr;
     if (itemType == Antidote)
     {
         temp = get(itemType);
@@ -155,44 +155,43 @@ bool BaseBag::useItem(ItemType itemType)
     return true;
 }
 
-
-
-
-string BaseBag::toString() const {
-    if (size == 0) {
+string BaseBag::toString() const
+{
+    if (size == 0)
+    {
         return "Bag[count=0;]";
     }
     string result = "Bag[count=" + to_string(size) + ";";
     string typeArray[] = {"Antidote", "PhoenixI", "PhoenixII", "PhoenixIII", "PhoenixIV"};
-    Node* current = head;
-    if (current) {
+    Node *current = head;
+    if (current)
+    {
         result += typeArray[current->data->Type()] + ",";
         current = current->next;
-        while (current) {
+        while (current)
+        {
             result += typeArray[current->data->Type()] + ",";
             current = current->next;
         }
-        result[result.length()-1] = ']';
+        result[result.length() - 1] = ']';
     }
     return result;
 }
 
-
-
-
-
-void BaseBag::deleteSlot() {
-if (size == 0) {
-return;
+void BaseBag::deleteSlot()
+{
+    if (size == 0)
+    {
+        return;
+    }
+    else
+    {
+        size--;
+        Node *current = head;
+        head = head->next;
+        delete current;
+    }
 }
-else {
-size--;
-Node* current = head;
-head = head->next;
-delete current;
-}
-}
-
 
 BaseBag::~BaseBag()
 {
@@ -200,29 +199,32 @@ BaseBag::~BaseBag()
         deleteSlot();
 }
 
-//PaladinKnight
+// PaladinKnight
 BagPaladinKnight::BagPaladinKnight(BaseKnight *knight, int antidote, int phoenixDownI)
     : BaseBag(knight, antidote, phoenixDownI)
 {
     this->capacity = -1;
 
-    for (int i = 0; i < phoenixDownI && this->size != this->capacity; i++) {
+    for (int i = 0; i < phoenixDownI && this->size != this->capacity; i++)
+    {
         this->insertFirst(new PhoenixDownIItem());
     }
-    for (int i = 0; i < antidote && this->size != this->capacity; i++) {
+    for (int i = 0; i < antidote && this->size != this->capacity; i++)
+    {
         this->insertFirst(new AntidoteItem());
     }
 }
-
 
 BagLancelotKnight::BagLancelotKnight(BaseKnight *knight, int antidote, int phoenixDownI)
     : BaseBag(knight, antidote, phoenixDownI)
 {
     this->capacity = 16;
-    for (int i = 0; i < phoenixDownI && this->size != this->capacity; i++) {
+    for (int i = 0; i < phoenixDownI && this->size != this->capacity; i++)
+    {
         this->insertFirst(new PhoenixDownIItem());
     }
-    for (int i = 0; i < antidote && this->size != this->capacity; i++) {
+    for (int i = 0; i < antidote && this->size != this->capacity; i++)
+    {
         this->insertFirst(new AntidoteItem());
     }
 }
@@ -231,7 +233,8 @@ BagDragonKnight::BagDragonKnight(BaseKnight *knight, int antidote, int phoenixDo
     : BaseBag(knight, antidote, phoenixDownI)
 {
     this->capacity = 14;
-    for (int i = 0; i < phoenixDownI && this->size < this->capacity; i++) {
+    for (int i = 0; i < phoenixDownI && this->size < this->capacity; i++)
+    {
         this->insertFirst(new PhoenixDownIItem());
     }
 }
@@ -240,10 +243,12 @@ BagNormalKnight::BagNormalKnight(BaseKnight *knight, int antidote, int phoenixDo
     : BaseBag(knight, antidote, phoenixDownI)
 {
     this->capacity = 19;
-    for (int i = 0; i < phoenixDownI && this->size < this->capacity; i++) {
+    for (int i = 0; i < phoenixDownI && this->size < this->capacity; i++)
+    {
         this->insertFirst(new PhoenixDownIItem());
     }
-    for (int i = 0; i < antidote && this->size < this->capacity; i++) {
+    for (int i = 0; i < antidote && this->size < this->capacity; i++)
+    {
         this->insertFirst(new AntidoteItem());
     }
 }
@@ -276,33 +281,37 @@ void PhoenixDownIIItem::use(BaseKnight *knight)
 }
 PhoenixDownIIItem::PhoenixDownIIItem() { itemType = PhoenixDownII; }
 // PhoenixDownIII
-bool PhoenixDownIIIItem::canUse(BaseKnight *knight) {
+bool PhoenixDownIIIItem::canUse(BaseKnight *knight)
+{
     return knight->getHp() < knight->getMaxHp() / 3;
-    }
-
+}
 
 void PhoenixDownIIIItem::use(BaseKnight *knight)
 {
-    if (knight->getHp() <= 0){
+    if (knight->getHp() <= 0)
+    {
         knight->setHp(knight->getMaxHp() / 3);
     }
-    else{
+    else
+    {
         knight->setHp(knight->getMaxHp() / 4 + knight->getHp());
     }
 }
 
-
-
-PhoenixDownIIIItem::PhoenixDownIIIItem() {itemType = PhoenixDownIII;}
+PhoenixDownIIIItem::PhoenixDownIIIItem() { itemType = PhoenixDownIII; }
 // PhoenixDownIV
-bool PhoenixDownIVItem::canUse(BaseKnight *knight) {
+bool PhoenixDownIVItem::canUse(BaseKnight *knight)
+{
     return knight->getHp() < knight->getMaxHp() / 2;
-    }
-void PhoenixDownIVItem::use(BaseKnight *knight){
-    if (knight->getHp() <= 0){
+}
+void PhoenixDownIVItem::use(BaseKnight *knight)
+{
+    if (knight->getHp() <= 0)
+    {
         knight->setHp(knight->getMaxHp() / 2);
     }
-    else{
+    else
+    {
         knight->setHp(knight->getMaxHp() / 5 + knight->getHp());
     }
 }
@@ -313,20 +322,22 @@ PhoenixDownIVItem::PhoenixDownIVItem() { itemType = PhoenixDownIV; }
 BaseKnight *BaseKnight::create(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI)
 {
     BaseKnight *knight;
-    if (maxhp == 888){
+    if (maxhp == 888)
+    {
         knight = new LancelotKnight(id, maxhp, level, gil, antidote, phoenixdownI);
     }
-    else if (isPythagoras(maxhp)){
+    else if (isPythagoras(maxhp))
+    {
         knight = new DragonKnight(id, maxhp, level, gil, antidote, phoenixdownI);
     }
-    else if (isPrime(maxhp)){
+    else if (isPrime(maxhp))
+    {
         knight = new PaladinKnight(id, maxhp, level, gil, antidote, phoenixdownI);
     }
-    else{
+    else
+    {
         knight = new NormalKnight(id, maxhp, level, gil, antidote, phoenixdownI);
     }
-
-
 
     return knight;
 }
@@ -338,22 +349,15 @@ BaseKnight::BaseKnight(int id, int maxhp, int level, int gil)
     this->level = level;
     this->gil = gil;
 }
-string BaseKnight::toString() const {
+string BaseKnight::toString() const
+{
     string typeString[4] = {"PALADIN", "LANCELOT", "DRAGON", "NORMAL"};
     // inefficient version, students can change these code
     //      but the format output must be the same
     string s("");
-    s += "[Knight:id:" + to_string(id) 
-        + ",hp:" + to_string(hp) 
-        + ",maxhp:" + to_string(maxhp)
-        + ",level:" + to_string(level)
-        + ",gil:" + to_string(gil)
-        + "," + bag->toString()
-        + ",knight_type:" + typeString[knightType]
-        + "]";
+    s += "[Knight:id:" + to_string(id) + ",hp:" + to_string(hp) + ",maxhp:" + to_string(maxhp) + ",level:" + to_string(level) + ",gil:" + to_string(gil) + "," + bag->toString() + ",knight_type:" + typeString[knightType] + "]";
     return s;
 }
-
 
 bool BaseKnight::fight(BaseOpponent *opponent, int i)
 {
@@ -393,7 +397,7 @@ bool BaseKnight::fight(BaseOpponent *opponent, int i)
             this->bag->useItem(PhoenixDownIII);
         }
     }
-// gặp ma Tornbery
+    // gặp ma Tornbery
     else if (event_id == 6)
     {
         // thắng
@@ -410,15 +414,15 @@ bool BaseKnight::fight(BaseOpponent *opponent, int i)
         {
             if (knightType != DRAGON)
             { // không phải Dragon thì trúng độc
-                this->poisoned = true; 
+                this->poisoned = true;
                 this->bag->useItem(Antidote);
-                
-                
+
                 if (this->poisoned)
                 {
 
-                    for (int i = 0; i < 3; i++) {
-                        this->bag->deleteSlot(); 
+                    for (int i = 0; i < 3; i++)
+                    {
+                        this->bag->deleteSlot();
                     }
 
                     this->poisoned = false;
@@ -429,9 +433,7 @@ bool BaseKnight::fight(BaseOpponent *opponent, int i)
         }
     }
 
-
-
-// gặp nữ hoàng cờ bạc Queen of Cards
+    // gặp nữ hoàng cờ bạc Queen of Cards
     else if (event_id == 7)
     {
         // thắng
@@ -448,7 +450,7 @@ bool BaseKnight::fight(BaseOpponent *opponent, int i)
             }
         }
     }
-// gặp lái buôn vui tính Nina de Rings
+    // gặp lái buôn vui tính Nina de Rings
     else if (event_id == 8)
     {
         if (hp < maxhp / 3)
@@ -467,12 +469,12 @@ bool BaseKnight::fight(BaseOpponent *opponent, int i)
             }
         }
     }
-// gặp Vườn sầu riêng
+    // gặp Vườn sầu riêng
     else if (event_id == 9)
     {
         hp = maxhp;
     }
-// gặp quái vật Omega Weapon
+    // gặp quái vật Omega Weapon
     else if (event_id == 10 && ArmyKnights::bool_winOmegaWeapon == false)
     {
         // thắng
@@ -489,14 +491,14 @@ bool BaseKnight::fight(BaseOpponent *opponent, int i)
             this->bag->useItem(PhoenixDownIII);
         }
     }
-// gặp Hades
+    // gặp Hades
     else if (event_id == 11 && ArmyKnights::bool_winHades == false)
     {
         if (level == 10 || knightType == PALADIN && level >= 8)
         { // thắng
             ArmyKnights::bool_winHades = true;
         }
-        
+
         else
         { // thua
             hp = 0;
@@ -504,18 +506,6 @@ bool BaseKnight::fight(BaseOpponent *opponent, int i)
             ArmyKnights::bool_winHades = false;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     if (this->hp <= 0 && this->gil >= 100)
     {
@@ -542,27 +532,26 @@ bool BaseKnight::getPoisoned() { return poisoned; }
 
 void BaseKnight::setHp(int hp)
 {
-if (hp > maxhp)
-this->hp = maxhp;
-else
-{
-if (this->hp > hp)
-{
-this->hp = hp;
-this->bag->useItem(ItemType::PhoenixDownI);
-if (this->hp <= 0 && this->gil >= 100)
-{
-this->hp = this->maxhp / 2;
-this->gil -= 100;
+    if (hp > maxhp)
+        this->hp = maxhp;
+    else
+    {
+        if (this->hp > hp)
+        {
+            this->hp = hp;
+            this->bag->useItem(ItemType::PhoenixDownI);
+            if (this->hp <= 0 && this->gil >= 100)
+            {
+                this->hp = this->maxhp / 2;
+                this->gil -= 100;
+            }
+        }
+        else
+        {
+            this->hp = hp;
+        }
+    }
 }
-}
-else
-{
-this->hp = hp;
-}
-}
-}
-
 
 void BaseKnight::setLevel(int level)
 {
@@ -585,14 +574,13 @@ bool BaseKnight::setBag(BaseItem *item)
     return bag->insertFirst(item);
 }
 
-//Paladin Knight
+// Paladin Knight
 PaladinKnight::PaladinKnight(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI) : BaseKnight(id, maxhp, level, gil)
 {
     // khởi tạo tên và túi của hiệp sĩ
     this->knightType = PALADIN;
     this->bag = new BagPaladinKnight(this, antidote, phoenixdownI);
 }
-
 
 LancelotKnight::LancelotKnight(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI)
     : BaseKnight(id, maxhp, level, gil)
@@ -601,14 +589,12 @@ LancelotKnight::LancelotKnight(int id, int maxhp, int level, int gil, int antido
     this->bag = new BagLancelotKnight(this, antidote, phoenixdownI);
 }
 
-
 DragonKnight::DragonKnight(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI)
     : BaseKnight(id, maxhp, level, gil)
 {
     this->knightType = DRAGON;
     this->bag = new BagDragonKnight(this, antidote, phoenixdownI);
 }
-
 
 NormalKnight::NormalKnight(int id, int maxhp, int level, int gil, int antidote, int phoenixdownI)
     : BaseKnight(id, maxhp, level, gil)
@@ -675,7 +661,7 @@ bool ArmyKnights::fight(BaseOpponent *opponent)
                 }
                 else
                 {
-                    BaseKnight_array[i]->setGil(999); 
+                    BaseKnight_array[i]->setGil(999);
                     if (i > 0)
                     {
                         BaseKnight_array[i - 1]->setGil(BaseKnight_array[i - 1]->getGil() + leftovers);
@@ -698,7 +684,7 @@ bool ArmyKnights::fight(BaseOpponent *opponent)
 
 bool ArmyKnights::adventure(Events *events)
 {
-    
+
     ArmyKnights::bool_winHades = ArmyKnights::bool_winOmegaWeapon = false;
     this->i = 0;
     for (; i < events->count(); i++)
@@ -753,9 +739,8 @@ bool ArmyKnights::adventure(Events *events)
             {
                 delete item;
             }
-        }   
+        }
 
-        
         else if (events->get(i) == 113)
         {
             BaseItem *item = nullptr;
@@ -791,102 +776,101 @@ bool ArmyKnights::adventure(Events *events)
             }
         }
 
-        else if (events->get(i) == 95) {
-    this->bool_hasPaladinShield = true;
+        else if (events->get(i) == 95)
+        {
+            this->bool_hasPaladinShield = true;
         }
-        else if (events->get(i) == 96) {
-    this->bool_hasLancelotSpear = true;
+        else if (events->get(i) == 96)
+        {
+            this->bool_hasLancelotSpear = true;
         }
-        else if (events->get(i) == 97) {
+        else if (events->get(i) == 97)
+        {
             this->bool_hasGuinevereHair = true;
         }
-        else if (events->get(i) == 98) {
-            if (bool_hasPaladinShield && bool_hasLancelotSpear && bool_hasGuinevereHair) {
+        else if (events->get(i) == 98)
+        {
+            if (bool_hasPaladinShield && bool_hasLancelotSpear && bool_hasGuinevereHair)
+            {
                 this->bool_hasExcaliburSword = true;
             }
         }
-        
-// gặp Unltimecia
-else if (events->get(i) == 99)
-{
-    if (bool_hasExcaliburSword == 1)
-    {
-        this->printInfo();
-        return true;
-    }
 
-
-
-
-
-    else if ((bool_hasGuinevereHair == 1) && (bool_hasLancelotSpear == 1) && (bool_hasPaladinShield == 1))
-    {
-        int UltimeciaHp = 5000;
-        BaseKnight *lastNormalKnight = nullptr;
-        int normalKnightCount = 0;
-
-        while (size > 0)
+        // gặp Unltimecia
+        else if (events->get(i) == 99)
         {
-            BaseKnight* knight = lastKnight();
-            
-            if (knight->knightBaseDamage() < 0) 
+            if (bool_hasExcaliburSword == 1)
             {
-                delete knight;
-                continue;
-            }
-            
-            UltimeciaHp = UltimeciaHp - knight->knightBaseDamage();
-
-            if (knight->knightBaseDamage() == 0) 
-            {
-                ++normalKnightCount;
-                if (!lastNormalKnight)
-                {
-                    lastNormalKnight = knight;
-                }
-                else
-                {
-                    delete knight;
-                }
-            }
-            else 
-            {
-                delete knight;
-            }
-
-            if (UltimeciaHp <= 0)
-            {
-                for (int i = 0; i < normalKnightCount; ++i)
-                {
-                    BaseKnight_array[size++] = lastNormalKnight; 
-                }
-
                 this->printInfo();
                 return true;
             }
-            size = size - 1;
-            if (size == 0) 
+
+            else if ((bool_hasGuinevereHair == 1) && (bool_hasLancelotSpear == 1) && (bool_hasPaladinShield == 1))
             {
-                delete lastNormalKnight; 
-                this->printInfo();
-                return false;
+                int UltimeciaHp = 5000;
+                BaseKnight *lastNormalKnight = nullptr;
+                int normalKnightCount = 0;
+
+                while (size > 0)
+                {
+                    BaseKnight *knight = lastKnight();
+
+                    if (knight->knightBaseDamage() < 0)
+                    {
+                        delete knight;
+                        continue;
+                    }
+
+                    UltimeciaHp = UltimeciaHp - knight->knightBaseDamage();
+
+                    if (knight->knightBaseDamage() == 0)
+                    {
+                        ++normalKnightCount;
+                        if (!lastNormalKnight)
+                        {
+                            lastNormalKnight = knight;
+                        }
+                        else
+                        {
+                            delete knight;
+                        }
+                    }
+                    else
+                    {
+                        delete knight;
+                    }
+
+                    if (UltimeciaHp <= 0)
+                    {
+                        for (int i = 0; i < normalKnightCount; ++i)
+                        {
+                            BaseKnight_array[size++] = lastNormalKnight;
+                        }
+
+                        this->printInfo();
+                        return true;
+                    }
+                    size = size - 1;
+                    if (size == 0)
+                    {
+                        delete lastNormalKnight;
+                        this->printInfo();
+                        return false;
+                    }
+                }
             }
+            else
+            {
+                for (int i = 0; i < size; ++i)
+                {
+                    delete BaseKnight_array[i];
+                }
+                size = 0;
+            }
+
+            this->printInfo();
+            return size;
         }
-    }
-    else 
-    {
-        for (int i = 0; i < size; ++i)
-        {
-            delete BaseKnight_array[i];
-        }
-        size = 0;
-    }
-
-    this->printInfo();
-    return size;
-}
-
-
 
         this->printInfo();
         if (size == 0)
